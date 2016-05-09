@@ -59,6 +59,7 @@
     "chai": "^3.4.1",
     "chai-as-promised": "^5.2.0",
     "chai-spies": "^0.7.1",
+    "concat-with-sourcemaps": "^1.0.4",
     "eslint": "^2.8.0",
     "event-stream": "^3.3.2",
     "globby": "https://registry.npmjs.org/globby/-/globby-2.1.0.tgz",
