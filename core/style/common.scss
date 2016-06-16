@@ -173,6 +173,20 @@ h6{
 @include make-padding-margin(padding, p, 32, pxToRem(32px));
 
 
+//阴影
+.bh-box-shadow-lv1{
+  box-shadow: 0 pxToRem(1px) pxToRem(4px) rgba(0,0,0,.28);
+}
+.bh-box-shadow-lv2{
+  box-shadow: 0 pxToRem(2px) pxToRem(8px) rgba(0,0,0,.28);
+}
+.bh-box-shadow-lv3{
+  box-shadow: 0 pxToRem(4px) pxToRem(16px) rgba(0,0,0,.24);
+}
+.bh-box-shadow-lv4{
+  box-shadow: 0 pxToRem(6px) pxToRem(24px) rgba(0,0,0,.24);
+}
+
 
 //其他公共样式
 .bh-text-left{
