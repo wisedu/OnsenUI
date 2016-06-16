@@ -314,6 +314,10 @@ gulp.task('prepare', ['html2js'], () => {
             .pipe(gulp.dest('build/css/'))
             .pipe(gulpIf(CORDOVA_APP, gulp.dest('cordova-app/www/lib/onsen/css'))),
 
+        // vuejs
+        gulp.src('bindings/vuejs/*.js')
+            .pipe(gulp.dest('build/js/')),
+
         // angular.js copy
         gulp.src('bindings/angular1/lib/angular/*.*')
             .pipe(gulp.dest('build/js/angular/')),
