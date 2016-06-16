@@ -69,7 +69,14 @@ class BhModalBottomElement extends BaseElement {
         }
     }
 
-    clickAllHandle(){
+    //点击底部弹框的非内容区域,将弹框隐藏
+    _clickAllHandle(event){
+        this.hide();
+    }
+    //点击弹框的内容区域将事件冒泡阻止,防止误隐藏操作
+    _contentClickAllHandle(event){
+        event.preventDefault();
+        event.stopPropagation();
     }
 
     //组件加载完毕的回调,相当于该组件的入口方法
@@ -122,10 +129,14 @@ class BhModalBottomElement extends BaseElement {
         }
 
         if(isHaveClose){
+            //给关闭按钮添加点击事件
             closeIcon.addEventListener('click', this.hide, false);
         }
 
-        this.addEventListener('click', this.clickAllHandle, false);
+        //给内容去添加事件监听
+        this.querySelector('.'+space.rootClassName+'-content').addEventListener('click', this._contentClickAllHandle, false);
+        //给整个底部弹框添加点击事件监听
+        this.addEventListener('click', this._clickAllHandle, false);
     }
 }
 
