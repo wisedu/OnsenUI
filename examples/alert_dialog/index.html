@@ -3,10 +3,17 @@
 <head>
   <meta charset="utf-8">
   <title>Alert dialog | Onsen UI</title>
-  <link rel="stylesheet" href="../../build/css/onsenui.css">
-  <link rel="stylesheet" href="../../build/css/onsen-css-components.css">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>Button Demo | Onsen UI</title>
 
-  <script src="../../build/js/onsenui.js"></script>
+  <script src="../../core/utils/computeRootSize.js"></script>
+
+  <link rel="stylesheet" href="../../build/css/bh.css">
+  <link rel="stylesheet" href="http://res.wisedu.com/fe_components/mobile/iconfont/iconfont.css">
+
+  <script src="../../build/js/bh.js"></script>
+
 
   <script>
     app = { alertDialog: null };
@@ -28,7 +35,7 @@
     };
 
     app.alert = function() {
-      ons.notification.alert('Hello, world!');
+      ons.notification.alert('Hello, world!', {title: '提示'});
     };
 
     app.confirm = function() {

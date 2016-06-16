@@ -220,9 +220,9 @@ notification._alertOriginal = function(message, options = {}) {
   typeof message === 'string' ? (options.message = message) : (options = message);
 
   var defaults = {
-    buttonLabel: 'OK',
+    buttonLabel: '确定',
     animation: 'default',
-    title: 'Alert',
+    title: '',
     callback: function() {}
   };
 
@@ -309,10 +309,10 @@ notification._confirmOriginal = function(message, options = {}) {
   typeof message === 'string' ? (options.message = message) : (options = message);
 
   var defaults = {
-    buttonLabels: ['Cancel', 'OK'],
+    buttonLabels: ['取消', '确定'],
     primaryButtonIndex: 1,
     animation: 'default',
-    title: 'Confirm',
+    title: '',
     callback: function() {},
     cancelable: false
   };
@@ -413,9 +413,9 @@ notification._promptOriginal = function(message, options = {}) {
   typeof message === 'string' ? (options.message = message) : (options = message);
 
   var defaults = {
-    buttonLabel: 'OK',
+    buttonLabel: '确定',
     animation: 'default',
-    title: 'Alert',
+    title: '',
     defaultValue: '',
     placeholder: '',
     callback: function() {},
