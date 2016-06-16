@@ -21,18 +21,34 @@ const SPACE = {
 
 //继承标签开发所需的类
 class BhSelectRollElement extends BaseElement {
+    //获取当前选中数据
     getValue(){
-        var selectedValue = this.querySelector('.bh-active').getAttribute("value");
-        this.setAttribute("selected", selectedValue);
-        return selectedValue;
+        const activeItem = this.querySelector('.bh-active');
+        return {"key": activeItem.getAttribute('key'), "value": activeItem.getAttribute('value')};
     }
-    
+
+    /**
+     * 开始触摸
+     * 记录当前的y轴位置,存入SPACE.touchStartData.pageY中
+     * 将高亮节点的高亮去掉
+     * @param event
+     * @private
+     */
     _touchStartHandle(event){
         SPACE.touchStartData.timeStamp = event.timeStamp;
         SPACE.touchStartData.pageY = event.touches[0].pageY;
         this._resetItemActive('hide');
     }
 
+    /**
+     * 滑动处理
+     * 获取当前的y轴值,计算滑动距离与应滑动到的节点位置
+     * 设置ul的transform
+     * 更新SPACE.touchStartData.pageY为当前节点位置
+     * 更新SPACE.activeIndex为当前节点index
+     * @param event
+     * @private
+     */
     _touchMoveHandle(event){
         const pageY = event.touches[0].pageY;
         const diff = SPACE.touchStartData.pageY - pageY;
@@ -47,6 +63,7 @@ class BhSelectRollElement extends BaseElement {
         if(index >= 0 && index < SPACE.dataCount){
             SPACE.activeIndex = index;
         }else{
+            //当滑动到顶时或底部时,最多可偏移一个节点的距离
             if(index < 0){
                 SPACE.activeIndex = 0;
                 if(index < -1){
@@ -63,12 +80,17 @@ class BhSelectRollElement extends BaseElement {
         ulObj.style.transform = newTransform;
         SPACE.touchStartData.pageY = pageY;
 
+        //根据当前位置index设置节点的显示隐藏
         this._resetItemVisible(index);
     }
 
+    /**
+     * 根据当前位置index设置节点的显示隐藏
+     * @param index
+     * @private
+     */
     _resetItemVisible(index){
         const liList = this.querySelectorAll('li');
-        // this.querySelector('.bh-active').classList.remove('bh-active');
         const liLen = liList.length;
         for(let i=0; i<liLen; i++){
             if(i > index - 5 && i < index + 5){
@@ -79,17 +101,52 @@ class BhSelectRollElement extends BaseElement {
         }
     }
 
+    /**
+     * 触摸结束
+     * 对当前选中节点设置高亮
+     * 当节点不在正中间,移动节点居中
+     * trigger一个change事件,把key和value值返回
+     * @param event
+     * @private
+     */
     _touchEndHandle(event){
         SPACE.touchStartData = {};
         this._resetItemActive('show');
         const ulObj = this.querySelector('ul');
         ulObj.style.transform = this._getUlTransform(SPACE.activeIndex * SPACE.rotateXstep);
 
-        util.triggerElementEvent(this, 'change', {
-            value: JSON.parse(this.getValue())
-        });
+        util.triggerElementEvent(this, 'change', this.getValue());
     }
 
+    /**
+     * 当动态设置selected属性时的处理
+     * 可传入json字符串或则key值
+     * 根据传入的值设置高亮节点,并触发change事件
+     * @param newValue
+     * @private
+     */
+    _resetSelectItem(newValue){
+        let selectData = null;
+        try {
+            selectData = JSON.parse(newValue).key;
+        }catch (e){
+            selectData = newValue;
+        }
+
+        const selectItem = this.querySelector(`li[key='${selectData}']`);
+        if(selectItem){
+            this._resetItemActive('hide');
+            SPACE.activeIndex = util.getElementIndex(selectItem);
+            this._resetItemVisible(SPACE.activeIndex);
+            this._touchEndHandle();
+        }
+    }
+
+    /**
+     * 设置节点高亮class
+     * @param type show对当前节点设置高亮,hide移除当前节点的高亮
+     * @private
+     */
     _resetItemActive(type){
         const ulObj = this.querySelector('ul');
         const liList = ulObj.querySelectorAll('li');
@@ -100,6 +157,12 @@ class BhSelectRollElement extends BaseElement {
         }
     }
 
+    /**
+     * ul的transform值
+     * @param rotateX
+     * @returns {string}
+     * @private
+     */
     _getUlTransform(rotateX){
         return `perspective(500rem) rotateY(0deg) rotateX(${rotateX}deg)`;
     }
@@ -112,50 +175,76 @@ class BhSelectRollElement extends BaseElement {
     //属性变更的回调，vue集成时，会被多次触发
     attributeChangedCallback(propName,oldValue,newValue){
         switch(propName){
-            case "value":
-                if(newValue === undefined || newValue == null || newValue == ""){return;}
-                var items = JSON.parse(newValue);
-                this._renderItems(items);
+            //该组件的数据,必须是json字符串
+            //修改data数据的处理
+            case 'data':
+                if(!newValue){return;}
+                //渲染数据
+                this._renderItems(newValue);
                 break;
-            case "selected":
-                let activeItem = this.querySelector(".bh-select-roll-list .bh-active");
-                if(activeItem){
-                    var curClass = activeItem.getAttribute("class");
-                    activeItem.setAttribute("class", curClass.replace("bh-active", ""));
-                }
-                //this.querySelector(`li[value='${newValue}']`).setAttribute("class", "bh-active bh-visible");
+            //设置选中节点的处理
+            case 'selected':
+                this._resetSelectItem(newValue);
                 break;
             default:
                 break;
         }
     }
 
-    _renderItems(items){
-        const selectDatas = items;
-        const selectDataLen = selectDatas.length;
-
-        SPACE.dataCount = selectDataLen;
+    /**
+     * 渲染节点列表
+     * @param items 节点数据,是json字符串
+     * @param type init是初始化时以字符串返回,否则直接添加到HTML中
+     * @returns {string}
+     * @private
+     */
+    _renderItems(items, type){
         let listHtml = '';
-        const itemStyle = `transform-origin: center center -7rem; transform: translateZ(7rem) rotateX(@rotateXNumdeg);`;
-        for(let i=0; i<selectDataLen; i++){
-            let itemClass = '';
-            if(i < 4){
-                if(i !== 0){
-                    itemClass = 'bh-visible';
-                }else{
-                    itemClass = 'bh-active bh-visible';
-                }
+        if(items){
+            try{
+                items = JSON.parse(items);
+            }catch (e){
+                //当数据是静态的直接写在HTML标签上的处理,将其转换成json可解析的格式
+                items = JSON.parse(items.replace(/{ *' *key *'/g, '{"key"')
+                    .replace(/{ *' *value *'/g, '{"value"')
+                    .replace(/' *key *' *:/g, '"key":')
+                    .replace(/' *value *' *:/g, '"value":')
+                    .replace(/: *' */g, ':"')
+                    .replace(/ *' *}/g, '"}')
+                    .replace(/' *,/g, '",'));
             }
-            const selectItem = selectDatas[i];
-            let itemValue = JSON.stringify(selectDatas[i]);
-            
-            listHtml += `<li class="${itemClass}" value='${itemValue}' style="${itemStyle.replace('@rotateXNum', -(i * SPACE.rotateXstep))}">${selectDatas[i].VALUE}</li>`;
+            const selectDatas = items;
+            const selectDataLen = selectDatas.length;
+
+            SPACE.dataCount = selectDataLen;
+
+            const itemStyle = `transform-origin: center center -7rem; transform: translateZ(7rem) rotateX(@rotateXNumdeg);`;
+            for(let i=0; i<selectDataLen; i++){
+                let itemClass = '';
+                //前4条数据让其为显示状态
+                if(i < 4){
+                    if(i !== 0){
+                        itemClass = 'bh-visible';
+                    }else{
+                        itemClass = 'bh-active bh-visible';
+                    }
+                }
+                const selectItem = selectDatas[i];
+
+                listHtml += `<li class="${itemClass}" value="${selectItem.value}" key="${selectItem.key}" style="${itemStyle.replace('@rotateXNum', -(i * SPACE.rotateXstep))}">${selectItem.value}</li>`;
+            }
         }
-        this.querySelector(".bh-select-roll-list").innerHTML = listHtml;
+
+        if(type === 'init'){
+            return listHtml;
+        }else{
+            this.querySelector('.bh-select-roll-list').innerHTML = listHtml;
+        }
     }
 
     //初始化方法
     _compile() {
+        //当这个组件已经初始化过,则不再进行初始化处理
         if(this.querySelector('.'+SPACE.rootClassName+'-body')){
             this.removeEventListener('touchstart', this._touchStartHandle, false);
             this.addEventListener('touchstart', this._touchStartHandle, false);
@@ -167,21 +256,30 @@ class BhSelectRollElement extends BaseElement {
             this.addEventListener('touchend', this._touchEndHandle, false);
             return;
         }
+
+        //当该组件是嵌在底部弹框组件里,则设置底部弹框的高度
         const modalBottomContentObj = util.findParent(this, '.bh-modal-bottom-content');
         if(modalBottomContentObj){
             modalBottomContentObj.style.height = '17rem';
         }
 
         const mobileOs = platform.getMobileOS();
-        let iosUltransformOrigin = '';
+        let ultransformOrigin = '';
+        //当该组件是在iOS中,则给其加入动画定位点,以确保动画的正确
         if(mobileOs === 'ios'){
-            iosUltransformOrigin = 'transform-origin: center center 7rem;';
+            ultransformOrigin = 'transform-origin: center center 7rem;';
         }
 
+        const data = this.getAttribute('data');
+        const listHtml = this._renderItems(data, 'init');
+
+        //拼接内容串
         const contentHtml = `
             <div class="${SPACE.rootClassName}-body">
                 <div class="${SPACE.rootClassName}-box"></div>
-                <ul class="bh-select-roll-list" style="${iosUltransformOrigin} transform: ${this._getUlTransform(0)}"></ul>
+                <ul class="bh-select-roll-list" style="${ultransformOrigin} transform: ${this._getUlTransform(0)}">
+                    ${listHtml}
+                </ul>
             </div>
         `;
 
