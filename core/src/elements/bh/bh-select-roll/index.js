@@ -16,7 +16,11 @@ const SPACE = {
     touchStartData: {},
     dataCount: 0,
     rotateXstep: 20,
-    activeIndex: 0
+    activeIndex: 0,
+    //当触摸事件结束后会将标签上的selected属性值修改,
+    // 由于同时监听了该属性的变化做动态设置处理,所以会触发两次change事件,
+    // 该属性是为了屏蔽第二次触发change事件
+    selfToSetSelected: false
 };
 
 //继承标签开发所需的类
@@ -115,7 +119,11 @@ class BhSelectRollElement extends BaseElement {
         const ulObj = this.querySelector('ul');
         ulObj.style.transform = this._getUlTransform(SPACE.activeIndex * SPACE.rotateXstep);
 
-        util.triggerElementEvent(this, 'change', this.getValue());
+        const selectData = this.getValue();
+        util.triggerElementEvent(this, 'change', selectData);
+        //触摸结束后,同步设置selected值,设置selfToSetSelected为true避免多次触发事件
+        SPACE.selfToSetSelected = true;
+        this.setAttribute('selected', JSON.stringify(selectData));
     }
 
     /**
@@ -126,14 +134,20 @@ class BhSelectRollElement extends BaseElement {
      * @private
      */
     _resetSelectItem(newValue){
-        let selectData = null;
+        //selfToSetSelected为true表示是组件自己动态设置的,不对selected做同步处理
+        if(SPACE.selfToSetSelected){
+            //将selfToSetSelected置为false
+            SPACE.selfToSetSelected = false;
+            return;
+        }
+        let toSelectKey = null;
         try {
-            selectData = JSON.parse(newValue).key;
+            toSelectKey = JSON.parse(this._formateJsonStr(newValue)).key;
         }catch (e){
-            selectData = newValue;
+            toSelectKey = newValue;
         }
 
-        const selectItem = this.querySelector(`li[key='${selectData}']`);
+        const selectItem = this.querySelector(`li[key='${toSelectKey}']`);
         if(selectItem){
             this._resetItemActive('hide');
             SPACE.activeIndex = util.getElementIndex(selectItem);
@@ -185,6 +199,7 @@ class BhSelectRollElement extends BaseElement {
             //设置选中节点的处理
             case 'selected':
                 this._resetSelectItem(newValue);
+                window.console.log('change')
                 break;
             default:
                 break;
@@ -205,17 +220,7 @@ class BhSelectRollElement extends BaseElement {
                 items = JSON.parse(items);
             }catch (e){
                 //当数据是静态的直接写在HTML标签上的处理,将其转换成json可解析的格式
-                items = JSON.parse(items.replace(/{ *' *key *'/ig, '{"key"')
-                    .replace(/{ *' *value *'/ig, '{"value"')
-                    .replace(/' *key *' *:/ig, '"key":')
-                    .replace(/' *value *' *:/ig, '"value":')
-                    .replace(/{ *key *:/ig, '{"key":')
-                    .replace(/{ *value *:/ig, '{"value":')
-                    .replace(/, *key *:/ig, ',"key":')
-                    .replace(/, *value *:/ig, ',"value":')
-                    .replace(/: *' */g, ':"')
-                    .replace(/ *' *}/g, '"}')
-                    .replace(/' *,/g, '",'));
+                items = JSON.parse(this._formateJsonStr(items));
             }
             const selectDatas = items;
             const selectDataLen = selectDatas.length;
@@ -246,6 +251,20 @@ class BhSelectRollElement extends BaseElement {
         }else{
             this.querySelector('.bh-select-roll-list').innerHTML = listHtml;
         }
+    }
+
+    _formateJsonStr(jsonStr){
+        return jsonStr.replace(/{ *' *key *'/ig, '{"key"')
+            .replace(/{ *' *value *'/ig, '{"value"')
+            .replace(/' *key *' *:/ig, '"key":')
+            .replace(/' *value *' *:/ig, '"value":')
+            .replace(/{ *key *:/ig, '{"key":')
+            .replace(/{ *value *:/ig, '{"value":')
+            .replace(/, *key *:/ig, ',"key":')
+            .replace(/, *value *:/ig, ',"value":')
+            .replace(/: *' */g, ':"')
+            .replace(/ *' *}/g, '"}')
+            .replace(/' *,/g, '",');
     }
 
     //初始化方法
