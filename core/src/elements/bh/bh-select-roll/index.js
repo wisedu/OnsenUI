@@ -209,6 +209,10 @@ class BhSelectRollElement extends BaseElement {
                     .replace(/{ *' *value *'/ig, '{"value"')
                     .replace(/' *key *' *:/ig, '"key":')
                     .replace(/' *value *' *:/ig, '"value":')
+                    .replace(/{ *key *:/ig, '{"key":')
+                    .replace(/{ *value *:/ig, '{"value":')
+                    .replace(/, *key *:/ig, ',"key":')
+                    .replace(/, *value *:/ig, ',"value":')
                     .replace(/: *' */g, ':"')
                     .replace(/ *' *}/g, '"}')
                     .replace(/' *,/g, '",'));
