@@ -28,10 +28,6 @@ var-switch-thumb-border-color-active = $switch-highlight-color
 var-switch-height = pxToRem(50)
 var-switch-width = pxToRem(81)
 
-var-material-switch-active-thumb-color = $material-switch-active-thumb-color
-var-material-switch-active-background-color = $material-switch-active-background-color
-var-material-switch-inactive-thumb-color = $material-switch-inactive-thumb-color
-var-material-switch-inactive-background-color = $material-switch-inactive-background-color
 
 /*! topdoc
   name: Switch
@@ -137,94 +133,3 @@ input:disabled + .switch__toggle
   bottom pxToRem(-5)
   left pxToRem(-10)
   right pxToRem(-10)
-
-/*! topdoc
-  name: Material Switch
-  use: Switch
-  modifiers:
-    :focus: Focus state
-    :disabled: Disabled state
-  markup:
-    <label class="switch switch--material">
-      <input type="checkbox" class="switch__input switch--material__input">
-      <div class="switch__toggle switch--material__toggle">
-        <div class="switch__handle switch--material__handle">
-        </div>
-      </div>
-    </label>
-    <label class="switch switch--material">
-      <input type="checkbox" class="switch__input switch--material__input" checked>
-      <div class="switch__toggle switch--material__toggle">
-        <div class="switch__handle switch--material__handle">
-        </div>
-      </div>
-    </label>
-    <label class="switch switch--material">
-      <input type="checkbox" class="switch__input switch--material__input" disabled>
-      <div class="switch__toggle switch--material__toggle">
-        <div class="switch__handle switch--material__handle">
-        </div>
-      </div>
-    </label>
-*/
-
-.switch.switch--material
-  width 36px
-  height 24px
-  padding 0 10px
-  min-width 36px
-
-  .switch__toggle
-    background-color var-material-switch-inactive-background-color
-    margin-top 5px
-    height 14px
-    box-shadow none
-
-  .switch__input
-    hide-input()
-    z-index -1
-
-  // switch toggle circle
-  .switch__handle
-    background-color var-material-switch-inactive-thumb-color
-    left 0px
-    margin-top -5px
-    width 20px
-    height 20px
-    shadow-2()
-
-  input:checked + .switch__toggle
-    background-color var-material-switch-active-background-color
-    box-shadow none
-
-    .switch__handle
-      left 16px
-      background-color var-material-switch-active-thumb-color
-      shadow-1()
-
-  input:disabled + .switch__toggle
-    disabled()
-
-  .switch__handle:before
-    background transparent
-    content ''
-    display block
-    width 100%
-    height 100%
-    border-radius 50%
-    z-index -1
-    box-shadow: 0px 0px 0px 0px rgba(0,0,0,0.12)
-    transition box-shadow 0.1s linear
-
-  &.switch--active .switch__handle:before
-    box-shadow: 0px 0px 0px 14px rgba(0,0,0,0.12)
-
-  &.switch--active input:checked + .switch__toggle .switch__handle:before
-    box-shadow: 0px 0px 0px 14px alpha(var-material-switch-active-thumb-color, 0.2)
-
-  .switch__touch
-    position absolute
-    top -10px
-    bottom -10px
-    left -15px
-    right -15px

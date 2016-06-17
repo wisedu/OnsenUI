@@ -28,10 +28,6 @@ var-navigation-bar-box-shadow = none
 var-navigation-bar-padding = 0
 var-navigation-bar-separator = 1px solid var-navigation-bar-separator-color
 
-var-navigation-bar-material-height = 56px
-
-var-material-navigation-bar-background-color = $material-toolbar-background-color
-var-material-navigation-bar-color = $material-toolbar-text-color
 
 var-bottom-navigation-bar-height = pxToRem(98)
 
@@ -307,95 +303,8 @@ navigation-bar__item()
     </div>
 */
 
-/*! topdoc
-  name: Material Navigation Bar
-  class: navigation-bar--material
-  use: Toolbar Button, Navigation Bar
-  markup:
-    <div class="navigation-bar navigation-bar--material">
-      <div class="navigation-bar__center navigation-bar--material__center">
-        Title
-      </div>
-    </div>
-*/
-
-.navigation-bar--material
-  display flex
-  flex-wrap nowrap
-  justify-content space-between
-  height var-navigation-bar-material-height
-  border-bottom 0
-  box-shadow 0 1px 5px rgba(0, 0, 0, 0.3)
-  padding 0
-  background-color var-material-navigation-bar-background-color
-  background-size 0
 
 .navigation-bar--noshadow
   box-shadow none
   background-image none
   border-bottom none
-
-navigation-bar--material-font()
-  material-font()
-  font-size 20px
-  font-weight 500
-  color var-material-navigation-bar-color
-
-.navigation-bar--material__left, .navigation-bar--material__right
-  navigation-bar--material-font()
-  height var-navigation-bar-material-height
-  min-width 72px
-  width auto
-  float initial
-  line-height var-navigation-bar-material-height
-
-.navigation-bar--material__center
-  navigation-bar--material-font()
-  height var-navigation-bar-material-height
-  width auto
-  flex-grow 1
-  overflow hidden
-  text-overflow ellipsis
-  text-align left
-  float initial
-  line-height var-navigation-bar-material-height
-
-.navigation-bar--material__center:first-child
-  margin-left 16px
-
-.navigation-bar--material__center:last-child
-  margin-right 16px
-
-.navigation-bar--material__left:empty, .navigation-bar--material__right:empty
-  min-width 16px
-
-/*! topdoc
-  name: Material Navigation Bar with Icons
-  class: navigation-bar--material
-  use: Toolbar Button, Material Navigation Bar
-  hint: .navigation-bar--material
-  markup:
-    <div class="navigation-bar navigation-bar--material">
-      <div class="navigation-bar__left navigation-bar--material__left">
-        <span class="toolbar-button toolbar-button--material">
-          <i class="zmdi zmdi-menu"></i>
-        </span>
-      </div>
-      <div class="navigation-bar__center navigation-bar--material__center">
-        Title
-      </div>
-      <div class="navigation-bar__right navigation-bar--material__right">
-        <span class="toolbar-button toolbar-button--material">
-          <i class="zmdi zmdi-search"></i>
-        </span>
-        <span class="toolbar-button toolbar-button--material">
-          <i class="zmdi zmdi-favorite"></i>
-        </span>
-        <span class="toolbar-button toolbar-button--material">
-          <i class="zmdi zmdi-more-vert"></i>
-        </span>
-      </div>
-    </div>
-*/
-
-

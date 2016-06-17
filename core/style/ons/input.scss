@@ -8,16 +8,6 @@ ons-input .text-input__container {
   display: inline-block;
 }
 
-ons-input .text-input--material__label {
-  position: absolute;
-  left: 0px;
-  top: 2px;
-  font-size: 16px;
-  font-weight: 400;
-  font-family: 'Roboto', 'Noto', sans-serif;
-  pointer-events: none;
-}
-
 ons-input .text-input__label:not(.text-input--material__label) {
   display: none;
 }
@@ -40,14 +30,3 @@ ons-input[disabled] {
   background-color: $gray-lv5;
 }
 
-ons-input input.text-input--material::-webkit-input-placeholder {
-  color: transparent;
-}
-
-ons-input input.text-input--material::-moz-placeholder {
-  color: transparent;
-}
-
-ons-input input.text-input--material:-ms-input-placeholder {
-  color: transparent;
-}

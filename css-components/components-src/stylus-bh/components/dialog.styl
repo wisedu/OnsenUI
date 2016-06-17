@@ -18,8 +18,6 @@ limitations under the License.
 // internal variables
 var-dialog-background-color = $dialog-background-color
 
-var-material-dialog-background-color = $material-dialog-background-color
-
 /*! topdoc
   name: Dialog
   class: dialog
@@ -66,26 +64,3 @@ var-material-dialog-background-color = $material-dialog-background-color
   bottom 0
   background-color rgba(0, 0, 0, 0.2)
 
-/*! topdoc
-  name: Material Dialog
-  use: Dialog
-  markup:
-    <div class="dialog-mask dialog-mask--material"></div>
-    <div class="dialog dialog--material">
-      <div class="dialog dialog-container--material">
-        <p style="margin-left:24px;margin-right:24px">The quick brown fox jumps over the lazy dog.</p>
-      </div>
-    </div>
-*/
-
-.dialog--material
-  material-font()
-  text-align left
-  shadow-5()
-
-.dialog-container--material
-  border-radius 2px
-  background-color var-material-dialog-background-color
-
-.dialog-mask--material
-  background-color rgba(0, 0, 0, 0.3)

@@ -17,14 +17,11 @@ limitations under the License.
 
 // internal variables
 var-popover-background-color = $popover-background-color
-var-popover-background-color-material = #FAFAFA
 var-popover-text-color = $popover-text-color
 var-popover-arrow-size = 18px
 var-popover-arrow-radius = 4px
 var-popover-radius = 8px
-var-popover-radius-material = 2px
 var-popover-margin = 6px
-var-popover-margin-material = 4px
 
 /*! topdoc
   name: Popover
@@ -111,71 +108,3 @@ var-popover-margin-material = 4px
 .popover--right .popover__arrow
   transform rotate(225deg)
   right 1px
-
-/*! topdoc
-  name: Popover(down)
-  use: Popover
-  markup:
-    <div class="popover-mask"></div>
-    <div class="popover popover--top" style="top:20px;left:50px;">
-      <div class="popover__arrow"></div>
-      <div class="popover__content">
-        <div style="text-align:center;opacity:0.4;margin-top:40px">Content</div>
-      </div>
-    </div>
-*/
-
-/*! topdoc
-  name: Popover(left)
-  use: Popover
-  markup:
-    <div class="popover-mask"></div>
-    <div class="popover popover--right" style="top:20px;right:20px;">
-      <div class="popover__arrow"></div>
-      <div class="popover__content">
-        <div style="text-align:center;opacity:0.4;margin-top:40px">Content</div>
-      </div>
-    </div>
-*/
-
-/*! topdoc
-  name: Popover(right)
-  use: Popover
-  markup:
-    <div class="popover-mask"></div>
-    <div class="popover popover--left" style="top:20px;left:20px;">
-      <div class="popover__arrow"></div>
-      <div class="popover__content">
-        <div style="text-align:center;opacity:0.4;margin-top:40px">Content</div>
-      </div>
-    </div>
-*/
-
-.popover--material
-  top var-popover-margin-material
-  right var-popover-margin-material
-  bottom var-popover-margin-material
-  left var-popover-margin-material
-
-.popover-mask--material
-  background-color transparent
-
-.popover__container--material
-  reset-box-model()
-  reset-base()
-  reset-cursor()
-  reset-font()
-  // position absolute
-  display inline-block
-  max-height 100%
-  overflow auto
-  /*border-bottom 4px solid transparent*/
-
-.popover__content--material
-  background-color var-popover-background-color-material
-  border-radius var-popover-radius-material
-  color var-popover-text-color
-  shadow-1()
-
-.popover__arrow--material
-  display none
