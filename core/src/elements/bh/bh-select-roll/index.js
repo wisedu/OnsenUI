@@ -205,10 +205,10 @@ class BhSelectRollElement extends BaseElement {
                 items = JSON.parse(items);
             }catch (e){
                 //当数据是静态的直接写在HTML标签上的处理,将其转换成json可解析的格式
-                items = JSON.parse(items.replace(/{ *' *key *'/g, '{"key"')
-                    .replace(/{ *' *value *'/g, '{"value"')
-                    .replace(/' *key *' *:/g, '"key":')
-                    .replace(/' *value *' *:/g, '"value":')
+                items = JSON.parse(items.replace(/{ *' *key *'/ig, '{"key"')
+                    .replace(/{ *' *value *'/ig, '{"value"')
+                    .replace(/' *key *' *:/ig, '"key":')
+                    .replace(/' *value *' *:/ig, '"value":')
                     .replace(/: *' */g, ':"')
                     .replace(/ *' *}/g, '"}')
                     .replace(/' *,/g, '",'));
@@ -230,8 +230,10 @@ class BhSelectRollElement extends BaseElement {
                     }
                 }
                 const selectItem = selectDatas[i];
+                const selectKey = selectItem.key ? selectItem.key : selectItem.KEY;
+                const selectValue = selectItem.value ? selectItem.value : selectItem.VALUE;
 
-                listHtml += `<li class="${itemClass}" value="${selectItem.value}" key="${selectItem.key}" style="${itemStyle.replace('@rotateXNum', -(i * SPACE.rotateXstep))}">${selectItem.value}</li>`;
+                listHtml += `<li class="${itemClass}" value="${selectValue}" key="${selectKey}" style="${itemStyle.replace('@rotateXNum', -(i * SPACE.rotateXstep))}">${selectValue}</li>`;
             }
         }
 
