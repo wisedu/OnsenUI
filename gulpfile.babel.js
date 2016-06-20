@@ -28,11 +28,28 @@ import fs from 'fs';
 import {argv} from 'yargs';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
+import jsdoc from 'gulp-jsdoc3';
 
 ////////////////////////////////////////
 
-const $ = require('gulp-load-plugins')();
+var $ = require('gulp-load-plugins')();
+var stylus = require('gulp-stylus');
+var minifyCSS = require('gulp-minify-css');
+var concat = require('gulp-concat');
+var rename = require('gulp-rename');
+var autoprefixer = require('gulp-autoprefixer');
+var sass = require('gulp-sass');
 const CORDOVA_APP = false;
+
+var cssConfig = {
+    prefixerScheme: ['> 1%', 'last 2 versions', 'Android >= 4.0', 'iOS >= 8'],
+    writePath: 'build/css/',
+    onsenFileName: 'onsenui',
+    onsenComponentsFileName: 'onsen-css-components',
+    bhComponentsFileName: 'bh-components',
+    bhScenesFileName: 'bh-scenes'
+};
+
 
 ////////////////////////////////////////
 // browser-sync
@@ -92,11 +109,14 @@ gulp.task('core', function() {
     }))
     .pipe($.addSrc.prepend('core/vendor/*.js'))
     .pipe($.sourcemaps.init())
-    .pipe($.concat('onsenui.js'))
+      .pipe($.concat('bh.js'))
     .pipe($.header('/*! <%= pkg.name %> v<%= pkg.version %> - ' + dateformat(new Date(), 'yyyy-mm-dd') + ' */\n', {pkg: pkg}))
     .pipe($.sourcemaps.write())
     .pipe(gulp.dest('build/js'))
-    .on('end', () => browserSync.reload());
+      .pipe(rename({suffix: '.min'}))
+      .pipe($.uglify())
+      .pipe(gulp.dest('build/js'))
+      .on('end', () => browserSync.reload());
 });
 
 ////////////////////////////////////////
@@ -492,4 +512,140 @@ gulp.task('e2e-test', ['webdriver-download', 'prepare'], function() {
     .on('end', function() {
       $.connect.serverClose();
     });
+});
+
+
+////////////////////////////////////////
+// develop
+//开发模式
+////////////////////////////////////////
+gulp.task('develop', ['watch-eslint', 'watch-develop-js', 'watch-develop-style', 'browser-sync'], function () {
+    // for livereload
+    // 监听文件变化,刷新浏览器
+    gulp.watch([
+        'examples/**/*.{js,css,html}',
+        'examples/bh/**/*.{js,css,html}',
+        'test/e2e/**/*.{js,css,html}',
+        'build/css/bh.css',
+        'build/js/bh.js',
+        'scenes/**/*.html'
+    ]).on('change', function (changedFile) {
+        gulp.src(changedFile.path)
+            .pipe(browserSync.reload({
+                stream: true,
+                once: true
+            }));
+    });
+});
+
+gulp.task('watch-develop-js', ['core'], function () {
+    //监听js文件,并编译
+    return gulp.watch(['core/src/*.js', 'core/src/**/*.js', 'core/src/bh/**/*.js'], ['core']);
+});
+
+gulp.task('watch-develop-style', ['style'], function () {
+    //监听样式文件并编译
+    return gulp.watch(
+        [
+            'css-components/components-src/stylus-bh/**/*.styl',
+            'css-components/components-src/bh/**/*.scss',
+            'core/style/**/*.scss',
+            'core/style/**/*.styl',
+            'scenes/**/*.scss'
+        ], ['style']);
+});
+
+//编译样式
+gulp.task('style', ['onsen-common-style', 'onsen-components-style', 'bh-components-style', 'bh-scenes-style'], function () {
+    return gulp.src([
+        cssConfig.writePath + cssConfig.onsenFileName + '.css',
+        cssConfig.writePath + cssConfig.onsenComponentsFileName + '.css',
+        cssConfig.writePath + cssConfig.bhComponentsFileName + '.css'
+    ])
+        .pipe($.concat('bh.css'))
+        .pipe(autoprefixer({
+            browsers: cssConfig.prefixerScheme
+        }))
+        .pipe(gulp.dest(cssConfig.writePath))
+        .pipe(rename({
+            suffix: '.min'
+        }))
+        .pipe(minifyCSS())
+        .pipe(gulp.dest(cssConfig.writePath));
+});
+
+////////////////////////////////////////
+// 编译onsenui基础样式
+////////////////////////////////////////
+gulp.task('onsen-common-style', function () {
+    return gulp.src([
+        './core/style/skins/default/*.scss',
+        './core/style/variable/*.scss',
+        './core/style/utils/*.scss',
+        './core/style/mixins/*.scss',
+        './core/style/ons/common.scss',
+        './core/style/ons/*.scss'
+    ])
+        .pipe($.concat(cssConfig.onsenFileName + '.scss'))
+        .pipe(sass().on('error', sass.logError))
+        .pipe(gulp.dest(cssConfig.writePath))
+});
+
+////////////////////////////////////////
+// 编译onsenui组件样式
+////////////////////////////////////////
+gulp.task('onsen-components-style', function () {
+    return gulp.src([
+        './core/style/skins/default/*.styl',
+        './core/style/variable/*.styl',
+        './core/style/utils/*.styl',
+        './css-components/components-src/stylus-bh/bh-default-theme.styl',
+        './css-components/components-src/stylus-bh/components/util.styl',
+        './css-components/components-src/stylus-bh/components/global.styl',
+        './css-components/components-src/stylus-bh/components/*.styl'
+    ])
+        .pipe(concat(cssConfig.onsenComponentsFileName + '.styl'))
+        .pipe(stylus({
+            error: true
+        }))
+        .pipe(gulp.dest(cssConfig.writePath))
+});
+
+////////////////////////////////////////
+// 编译bh组件样式
+////////////////////////////////////////
+gulp.task('bh-components-style', function () {
+    return gulp.src([
+        './core/style/skins/default/*.scss',
+        './core/style/variable/*.scss',
+        './core/style/utils/*.scss',
+        './core/style/mixins/*.scss',
+        './core/style/reset.scss',
+        './core/style/*.scss',
+        './css-components/components-src/bh/**/*.scss'
+    ])
+        .pipe(concat(cssConfig.bhComponentsFileName + '.scss'))
+        .pipe(sass().on('error', sass.logError))
+        .pipe(gulp.dest(cssConfig.writePath))
+});
+
+////////////////////////////////////////
+// 编译bh场景样式
+////////////////////////////////////////
+gulp.task('bh-scenes-style', function () {
+    return gulp.src([
+        './core/style/skins/default/*.scss',
+        './core/style/variable/*.scss',
+        './core/style/utils/*.scss',
+        './core/style/mixins/*.scss',
+        './scenes/**/*.scss'
+    ])
+        .pipe(concat(cssConfig.bhScenesFileName + '.scss'))
+        .pipe(sass().on('error', sass.logError))
+        .pipe(gulp.dest(cssConfig.writePath))
+        .pipe(rename({
+            suffix: '.min'
+        }))
+        .pipe(minifyCSS())
+        .pipe(gulp.dest(cssConfig.writePath))
 });
