@@ -27,8 +27,8 @@ class BhModalBottomElement extends BaseElement {
         const cover = util.findChild(this, '.'+space.rootClassName+'-cover');
 
         if(cover){
-            cover.classList.remove('bh-animate-fadeIn');
-            cover.classList.add('bh-animate-out-fadeOut');
+            cover.classList.add('bh-animate-fadeIn-lv1');
+            cover.classList.remove('bh-animate-fadeOut-lv1');
         }
 
         content.classList.remove('bh-animate-out-bottom');
@@ -53,8 +53,8 @@ class BhModalBottomElement extends BaseElement {
         const cover = util.findChild(root, '.'+space.rootClassName+'-cover');
 
         if(cover){
-            cover.classList.remove('bh-animate-fadeIn');
-            cover.classList.add('bh-animate-out-fadeOut');
+            cover.classList.remove('bh-animate-fadeIn-lv1');
+            cover.classList.add('bh-animate-fadeOut-lv1');
         }
 
         content.classList.remove('bh-animate-into-bottom');

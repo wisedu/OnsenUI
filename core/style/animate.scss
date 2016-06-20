@@ -92,6 +92,20 @@ $bh-animate-time: 0.45s;
   animation-name: bh-animate-fadeOut;
 }
 
+@keyframes bh-animate-fadeOut-lv1 {
+  0% {
+    opacity: 0.4;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.bh-animate-fadeOut-lv1 {
+  animation-name: bh-animate-fadeOut-lv1;
+}
+
 //渐现
 @keyframes bh-animate-fadeIn {
   0% {
@@ -105,4 +119,18 @@ $bh-animate-time: 0.45s;
 
 .bh-animate-fadeIn {
   animation-name: bh-animate-fadeIn;
+}
+
+@keyframes bh-animate-fadeIn-lv1 {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0.4;
+  }
+}
+
+.bh-animate-fadeIn-lv1 {
+  animation-name: bh-animate-fadeIn-lv1;
 }
