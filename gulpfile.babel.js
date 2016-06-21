@@ -28,7 +28,6 @@ import fs from 'fs';
 import {argv} from 'yargs';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
-import jsdoc from 'gulp-jsdoc3';
 
 ////////////////////////////////////////
 
