@@ -12,6 +12,13 @@ import {
   SimpleChange
 } from '@angular/core';
 
+/**
+ * @element ons-input
+ * @directive OnsInput
+ * @selector ons-input
+ * @description
+ *    [en]Angular 2 directive for <ons-input> component.[/en]
+ */
 @Directive({
   selector: 'ons-input'
 })
@@ -19,14 +26,25 @@ export class OnsInput implements OnChanges, OnDestroy {
   private _element: any;
   private _boundOnChange: Function;
 
+  /**
+   * @input value
+   * @type {string}
+   * @desc [en]Input value.[/en]
+   */
   @Input('value') _value: string;
+
+  /**
+   * @output valueChange
+   * @type {string}
+   * @desc [en]Triggers when the value is changed.[/en]
+   */
   @Output('valueChange') _valueChange: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(private _elementRef: ElementRef) {
     this._boundOnChange = this._onChange.bind(this);
     this._element = _elementRef.nativeElement;
 
-    this._element.addEventListener('change', this._boundOnChange);
+    this._element.addEventListener('input', this._boundOnChange);
   }
 
   _onChange(event) {
