@@ -1,6 +1,3 @@
-/*
- 步进组件
- */
 
 //引入标签开发需要的一些公共类
 import util from 'ons/util';
@@ -14,9 +11,16 @@ const space = {
     rootClassName: 'bh-carousel-btns'
 };
 
-//继承标签开发所需的类
+/**
+ * 轮播高亮按钮组
+ *
+ * @example <bh-carousel-btns count="要显示的按钮个数" active-index="要高亮的按钮index,起始数是0"></bh-carousel-btns>
+ */
 class BhCarouselBtnsElement extends BaseElement {
-    //设置高亮位置
+    /**
+     * 设置高亮位置
+     * @param {number} index 要高亮的按钮index,起始数是0
+     */
     setActiveIndex(index){
         const btns = this.querySelectorAll('div');
         const btnsLen = btns.length;

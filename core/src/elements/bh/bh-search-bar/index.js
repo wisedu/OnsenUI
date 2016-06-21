@@ -1,6 +1,3 @@
-/*
- 搜索组件
- */
 
 //引入标签开发需要的一些公共类
 import util from 'ons/util';
@@ -14,7 +11,11 @@ const space = {
     rootClassName: 'bh-search-bar'
 };
 
-//继承标签开发所需的类
+/**
+ * 搜索条
+ * @example <bh-search-bar></bh-search-bar>
+ * @example <bh-search-bar text="内容"></bh-search-bar>
+ */
 class BhSearchBarElement extends BaseElement {
 
     //组件加载完毕的回调,相当于该组件的入口方法

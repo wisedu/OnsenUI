@@ -1,4 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: bh-select-roll/index.js</title>
 
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: bh-select-roll/index.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
 //引入标签开发需要的一些公共类
 import util from 'ons/util';
 import platform from 'ons/platform';
@@ -22,8 +50,8 @@ const SPACE = {
 
 /**
  * 滚轮选择组件
- * @example <bh-select-roll date="列表数据的json字符串 [{key:"", value:""}]"></bh-select-roll>
- * @example <bh-select-roll date="列表数据的json字符串" selected="设定选中项{key:"",value:""}"></bh-select-roll>
+ * @example &lt;bh-select-roll date="列表数据的json字符串 [{key:"", value:""}]">&lt;/bh-select-roll>
+ * @example &lt;bh-select-roll date="列表数据的json字符串" selected="设定选中项{key:"",value:""}">&lt;/bh-select-roll>
  */
 class BhSelectRollElement extends BaseElement {
     /**
@@ -68,13 +96,13 @@ class BhSelectRollElement extends BaseElement {
         const newTransform = ulTransform.replace(/rotateX\(.+deg\)/, `rotateX(${newRotateXNum}deg)`);
         const index = Math.round(newRotateXNum / SPACE.rotateXstep);
 
-        if(index >= 0 && index < SPACE.dataCount){
+        if(index >= 0 &amp;&amp; index &lt; SPACE.dataCount){
             SPACE.activeIndex = index;
         }else{
             //当滑动到顶时或底部时,最多可偏移一个节点的距离
-            if(index < 0){
+            if(index &lt; 0){
                 SPACE.activeIndex = 0;
-                if(index < -1){
+                if(index &lt; -1){
                     return;
                 }
             }else{
@@ -100,8 +128,8 @@ class BhSelectRollElement extends BaseElement {
     _resetItemVisible(index){
         const liList = this.querySelectorAll('li');
         const liLen = liList.length;
-        for(let i=0; i<liLen; i++){
-            if(i > index - 5 && i < index + 5){
+        for(let i=0; i&lt;liLen; i++){
+            if(i > index - 5 &amp;&amp; i &lt; index + 5){
                 liList[i].classList.add('bh-visible');
             }else{
                 liList[i].classList.remove('bh-visible');
@@ -235,10 +263,10 @@ class BhSelectRollElement extends BaseElement {
             SPACE.dataCount = selectDataLen;
 
             const itemStyle = `transform-origin: center center -7rem; transform: translateZ(7rem) rotateX(@rotateXNumdeg);`;
-            for(let i=0; i<selectDataLen; i++){
+            for(let i=0; i&lt;selectDataLen; i++){
                 let itemClass = '';
                 //前4条数据让其为显示状态
-                if(i < 4){
+                if(i &lt; 4){
                     if(i !== 0){
                         itemClass = 'bh-visible';
                     }else{
@@ -249,7 +277,7 @@ class BhSelectRollElement extends BaseElement {
                 const selectKey = selectItem.key ? selectItem.key : selectItem.KEY;
                 const selectValue = selectItem.value ? selectItem.value : selectItem.VALUE;
 
-                listHtml += `<li class="${itemClass}" value="${selectValue}" key="${selectKey}" style="${itemStyle.replace('@rotateXNum', -(i * SPACE.rotateXstep))}">${selectValue}</li>`;
+                listHtml += `&lt;li class="${itemClass}" value="${selectValue}" key="${selectKey}" style="${itemStyle.replace('@rotateXNum', -(i * SPACE.rotateXstep))}">${selectValue}&lt;/li>`;
             }
         }
 
@@ -307,12 +335,12 @@ class BhSelectRollElement extends BaseElement {
 
         //拼接内容串
         const contentHtml = `
-            <div class="${SPACE.rootClassName}-body">
-                <div class="${SPACE.rootClassName}-box"></div>
-                <ul class="bh-select-roll-list" style="${ultransformOrigin} transform: ${this._getUlTransform(0)}">
+            &lt;div class="${SPACE.rootClassName}-body">
+                &lt;div class="${SPACE.rootClassName}-box">&lt;/div>
+                &lt;ul class="bh-select-roll-list" style="${ultransformOrigin} transform: ${this._getUlTransform(0)}">
                     ${listHtml}
-                </ul>
-            </div>
+                &lt;/ul>
+            &lt;/div>
         `;
 
         this.innerHTML = contentHtml;
@@ -330,3 +358,26 @@ window.BhSelectRollElement = document.registerElement('bh-select-roll', {
     prototype: BhSelectRollElement.prototype
 });
 
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BhCarouselBtnsElement.html">BhCarouselBtnsElement</a></li><li><a href="BhInputElement.html">BhInputElement</a></li><li><a href="BhModalBottomElement.html">BhModalBottomElement</a></li><li><a href="BhSearchBarElement.html">BhSearchBarElement</a></li><li><a href="BhSearchElement.html">BhSearchElement</a></li><li><a href="BhSelectRollElement.html">BhSelectRollElement</a></li><li><a href="BhSteppingElement.html">BhSteppingElement</a></li></ul><h3>Events</h3><ul><li><a href="BhSearchElement.html#event:BhSearchElementcancel">BhSearchElement cancel</a></li><li><a href="BhSelectRollElement.html#event:BhSelectRollElementchange">BhSelectRollElement change</a></li><li><a href="BhSteppingElement.html#event:BhSteppingElementchange">BhSteppingElement change</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Tue Jun 21 2016 11:17:21 GMT+0800 (CST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

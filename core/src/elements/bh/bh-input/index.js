@@ -1,8 +1,3 @@
-/*
- 步进组件
- */
-
-//引入标签开发需要的一些公共类
 import util from 'ons/util';
 import autoStyle from 'ons/autostyle';
 import ModifierUtil from 'ons/internal/modifier-util';
@@ -15,10 +10,16 @@ const space = {
     value: ''
 };
 
-//继承标签开发所需的类
+/**
+ * 输入框
+ *
+ * @example <bh-input label="label值" value="输入框的值"></bh-input>
+ */
 class BhInputElement extends BaseElement {
-
-    //提供给外部获取值的方法
+    /**
+     * 获取输入框的值
+     * @returns {string}
+     */
     value(){
         return util.findChild(this, 'input').value;
     }
