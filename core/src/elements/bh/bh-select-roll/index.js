@@ -63,6 +63,9 @@ class BhSelectRollElement extends BaseElement {
         const ulObj = this.querySelector('ul');
         const ulTransform = ulObj.style.transform;
         const rotateX = ulTransform.match(/rotateX\(\-?\d*\.+\d*deg\)|rotateX\(\-?\d*deg\)/);
+        if(!rotateX){
+            return;
+        }
         const rotateXNum = Number(rotateX[0].replace(/[^\-\.0-9]*/g, ''));
         const newRotateXNum = rotateXNum + diff;
         const newTransform = ulTransform.replace(/rotateX\(.+deg\)/, `rotateX(${newRotateXNum}deg)`);
@@ -316,6 +319,12 @@ class BhSelectRollElement extends BaseElement {
         `;
 
         this.innerHTML = contentHtml;
+
+        //初始化时若设置了默认选择项,则使其选中
+        const selected = this.getAttribute('selected');
+        if(selected){
+            this._resetSelectItem(selected);
+        }
 
         //监听该组件的事件
         this.addEventListener('touchstart', this._touchStartHandle, false);

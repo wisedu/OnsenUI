@@ -15,30 +15,20 @@
 </head>
 
 <body>
-  <ons-page>
-    <bh-select-roll>
-      <option id="abc" value="fd">浮动</option>
-      <option value="">发的</option>
-      <option>让我</option>
-      <option>浩特</option>
-      <option>后台</option>
-      <option>计划</option>
-      <option>联合国</option>
-      <option>特务</option>
-      <option>换肤</option>
-      <option>问过</option>
-      <option>月儿</option>
-      <option>愉快</option>
-      <option>聊天</option>
-      <option>评价</option>
-      <option>确认</option>
-    </bh-select-roll>
-  </ons-page>
+
 
 <script>
-  document.querySelector('bh-select-roll').addEventListener('change', function (data) {
-    window.console.log(data);
-  }, false);
+  var rollData = [{'key':'zg','value':'中国'},{'key':'bj','value':'北京'},{'key':'sh','value':'上海'},{'key':'nj','value':'南京'},{'key':'kl','value':'凯里'},{'key':'hz','value':'杭州'},{'key':'tj','value':'天津'},{'key':'sz','value':'深圳'},{'key':'gz','value':'广州'},{'key':'xg','value':'香港'},{'key':'am','value':'澳门'},{'key':'tw','value':'台湾'},{'key':'dyd','value':'钓鱼岛'},{'key':'nsqd','value':'南沙群岛'}];
+
+  var jsonData = JSON.stringify(rollData);
+
+  document.querySelector('body').innerHTML =
+          '<bh-modal-bottom id="modal">' +
+            '<bh-select-roll data='+jsonData+' selected='+JSON.stringify({'key':'tj','value':'天津'})+'>' +
+            '</bh-select-roll>' +
+          '</bh-modal-bottom>';
+
+  document.querySelector('bh-modal-bottom').show();
 </script>
 </body>
 </html>
