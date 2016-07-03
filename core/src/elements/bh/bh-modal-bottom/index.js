@@ -105,6 +105,15 @@ class BhModalBottomElement extends BaseElement {
                 selectCloseIcon.removeEventListener('click', this.hide, false);
                 selectCloseIcon.addEventListener('click', this.hide, false);
             }
+
+            var autoClose = this.getAttribute('auto-close');
+            if(autoClose !== 'false'){
+                //给内容去添加事件监听
+                this.querySelector('.'+space.rootClassName+'-content').addEventListener('click', this._contentClickAllHandle, false);
+                //给整个底部弹框添加点击事件监听
+                this.addEventListener('click', this._clickAllHandle, false);
+            }
+
             return;
         }
         const content = util.create('.'+space.rootClassName+'-content');
@@ -145,10 +154,13 @@ class BhModalBottomElement extends BaseElement {
             closeIcon.addEventListener('click', this.hide, false);
         }
 
-        //给内容去添加事件监听
-        this.querySelector('.'+space.rootClassName+'-content').addEventListener('click', this._contentClickAllHandle, false);
-        //给整个底部弹框添加点击事件监听
-        this.addEventListener('click', this._clickAllHandle, false);
+        var autoClose = this.getAttribute('auto-close');
+        if(autoClose !== 'false'){
+            //给内容去添加事件监听
+            this.querySelector('.'+space.rootClassName+'-content').addEventListener('click', this._contentClickAllHandle, false);
+            //给整个底部弹框添加点击事件监听
+            this.addEventListener('click', this._clickAllHandle, false);
+        }
     }
 }
 
