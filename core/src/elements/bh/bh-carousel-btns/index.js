@@ -44,6 +44,9 @@ class BhCarouselBtnsElement extends BaseElement {
         if(!count){
             return;
         }
+        if(this.querySelector(space.rootClassName+'-item').length > 0){
+            return;
+        }
 
         let activeIndex = parseInt(this.getAttribute('active-index'), 10);
         activeIndex = activeIndex ? activeIndex : 1;
