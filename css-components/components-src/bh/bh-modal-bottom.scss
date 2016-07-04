@@ -9,7 +9,7 @@ bh-modal-bottom,
 
   & .icon-close{
     position: absolute;
-    font-size: pxToRem(20px);
+    font-size: pxToRem(38px);
     top: pxToRem(8px);
     right: pxToRem(8px);
     z-index: $z-index-lv12;
@@ -24,7 +24,7 @@ bh-modal-bottom,
   bottom: 0;
   left: 0;
   z-index: $z-index-lv1;
-  padding: pxToRem(24px) pxToRem(16px);
+  padding: pxToRem(32px) pxToRem(16px);
 }
 
 .bh-modal-bottom-cover{
