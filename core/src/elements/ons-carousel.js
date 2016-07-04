@@ -578,7 +578,10 @@ class CarouselElement extends BaseElement {
   }
 
   _prepareEventListeners() {
-    this._gestureDetector = new GestureDetector(this, {dragMinDistance: 1});
+    this._gestureDetector = new GestureDetector(this, {
+      dragMinDistance: 1,
+      dragLockToAxis: true
+    });
     this._mutationObserver = new MutationObserver(() => this.refresh());
 
     this._updateSwipeable();
@@ -634,9 +637,13 @@ class CarouselElement extends BaseElement {
     }
   }
 
+  _isWrongDirection(d) {
+    // this._lastDragDirection = d;
+    return this._isVertical() ? (d === 'left' || d === 'right') : (d === 'up' || d === 'down');
+  }
+
   _onDrag(event) {
-    const direction = event.gesture.direction;
-    if ((this._isVertical() && (direction === 'left' || direction === 'right')) || (!this._isVertical() && (direction === 'up' || direction === 'down'))) {
+    if (this._isWrongDirection(event.gesture.direction)) {
       return;
     }
 
@@ -652,13 +659,15 @@ class CarouselElement extends BaseElement {
   }
 
   _onDragEnd(event) {
+    if (!this._lastDragEvent) {
+      return;
+    }
     this._currentElementSize = undefined;
-
     this._scroll = this._scroll - this._getScrollDelta(event);
 
-    if (this._getScrollDelta(event) !== 0) {
-      event.stopPropagation();
-    }
+    // if (!this._isWrongDirection(this._lastDragDirection) && this._getScrollDelta(event) !== 0) {
+    //   event.stopPropagation();
+    // }
 
     if (this._isOverScroll(this._scroll)) {
       let waitForAction = false;

@@ -8,4 +8,5 @@ dist
 .selenium
 /core/test/coverage
 /core/test/test-results.xml
+/core/test/TESTS-*.xml
 /build/*
