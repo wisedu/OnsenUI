@@ -94,43 +94,63 @@ const scheme = {
  * </ons-list-item>
  */
 class ListItemElement extends BaseElement {
+  /**
+   * @attribute modifier
+   * @type {String}
+   * @description
+   *   [en]The appearance of the list item.[/en]
+   *   [ja]各要素の表現を指定します。[/ja]
+   */
 
-    /**
-     * @attribute modifier
-     * @type {String}
-     * @description
-     *   [en]The appearance of the list item.[/en]
-     *   [ja]各要素の表現を指定します。[/ja]
-     */
+  /**
+   * @attribute lock-on-drag
+   * @type {String}
+   * @description
+   *   [en]Prevent vertical scrolling when the user drags horizontally.[/en]
+   *   [ja]この属性があると、ユーザーがこの要素を横方向にドラッグしている時に、縦方向のスクロールが起きないようになります。[/ja]
+   */
 
-    /**
-     * @attribute lock-on-drag
-     * @type {String}
-     * @description
-     *   [en]Prevent vertical scrolling when the user drags horizontally.[/en]
-     *   [ja]この属性があると、ユーザーがこの要素を横方向にドラッグしている時に、縦方向のスクロールが起きないようになります。[/ja]
-     */
+  /**
+   * @attribute tappable
+   * @type {Boolean}
+   * @description
+   *   [en]Makes the element react to taps.[/en]
+   *   [ja][/ja]
+   */
 
-    /**
-     * @attribute tappable
-     * @type {Boolean}
-     * @description
-     *   [en]Makes the element react to taps.[/en]
-     *   [ja][/ja]
-     */
+  /**
+   * @attribute tap-background-color
+   * @type {Color}
+   * @description
+   *   [en] Changes the background color when tapped. For this to work, the attribute "tappable" needs to be set. The default color is "#d9d9d9". It will display as a ripple effect on Android.[/en]
+   *   [ja][/ja]
+   */
 
-    /**
-     * @attribute tap-background-color
-     * @type {Color}
-     * @description
-     *   [en] Changes the background color when tapped. For this to work, the attribute "tappable" needs to be set. The default color is "#d9d9d9". It will display as a ripple effect on Android.[/en]
-     *   [ja][/ja]
-     */
+  createdCallback() {
+    contentReady(this, () => {
+      this._compile();
+    });
+  }
 
-    createdCallback() {
-        contentReady(this, () => {
-            this._compile();
-        });
+  _compile() {
+    this.classList.add('list__item');
+
+    let left, center, right;
+
+    for (let i = 0; i < this.children.length; i++) {
+      const el = this.children[i];
+
+      if (el.classList.contains('left')) {
+        el.classList.add('list__item__left');
+        left = el;
+      }
+      else if (el.classList.contains('center')) {
+        center = el;
+      }
+      else if (el.classList.contains('right')) {
+        el.classList.add('list__item__right');
+        right = el;
+      }
     }
 
     _compile() {
