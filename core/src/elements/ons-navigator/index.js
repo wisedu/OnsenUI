@@ -373,7 +373,8 @@ class NavigatorElement extends BaseElement {
     }
 
     return new Promise(resolve => {
-      this._pageLoader.load(oldPage.name, this, oldPage.pushedOptions.data, ({element, unload}) => {
+      const options = {page: oldPage.name, parent: this, params: oldPage.pushedOptions.data};
+      this._pageLoader.load(options, ({element, unload}) => {
         element = util.extend(element, {
           name: oldPage.name,
           data: oldPage.data,
@@ -498,7 +499,7 @@ class NavigatorElement extends BaseElement {
 
     if (options.pageHTML) {
       return this._pushPage(options, () => new Promise(resolve => {
-        instantPageLoader.load(options.pageHTML, this, options.data, ({element, unload}) => {
+        instantPageLoader.load({page: options.pageHTML, parent: this, params: options.data}, ({element, unload}) => {
           prepare(element, unload);
           resolve();
         });
@@ -506,7 +507,7 @@ class NavigatorElement extends BaseElement {
     }
 
     return this._pushPage(options, () => new Promise(resolve => {
-      this._pageLoader.load(page, this, options.data, ({element, unload}) => {
+      this._pageLoader.load({page, parent: this, params: options.data}, ({element, unload}) => {
         prepare(element, unload);
         resolve();
       });
@@ -556,7 +557,7 @@ class NavigatorElement extends BaseElement {
             leavePage.style.display = 'none';
           }
 
-          enterPage._show();
+          setImmediate(() => enterPage._show());
           util.triggerElementEvent(this, 'postpush', {leavePage, enterPage, navigator: this});
 
           if (typeof options.callback === 'function') {
@@ -597,20 +598,15 @@ class NavigatorElement extends BaseElement {
    *   [ja]現在表示中のページをを指定したページに置き換えます。[/ja]
    */
   replacePage(page, options = {}) {
-    ({page, options} = this._preparePageAndOptions(page, options));
-    const callback = options.callback;
+    return this.pushPage(page, options)
+      .then(resolvedValue => {
+        if (this.pages.length > 1) {
+          this.pages[this.pages.length - 2]._destroy();
+        }
+        this._updateLastPageBackButton();
 
-    options.callback = () => {
-      if (this.pages.length > 1) {
-        this.pages[this.pages.length - 2]._destroy();
-      }
-      this._updateLastPageBackButton();
-      if (callback instanceof Function) {
-        callback();
-      }
-    };
-
-    return this.pushPage(page, options);
+        return Promise.resolve(resolvedValue);
+      });
   }
 
   /**
@@ -638,7 +634,7 @@ class NavigatorElement extends BaseElement {
     const loader = typeof options.pageHTML === 'string' ? instantPageLoader : this._pageLoader;
 
     return new Promise(resolve => {
-      loader.load(page, this, {}, ({element, unload}) => {
+      loader.load({page, parent: this}, ({element, unload}) => {
         this._verifyPageElement(element);
         element = util.extend(element, {
           name: options.page,

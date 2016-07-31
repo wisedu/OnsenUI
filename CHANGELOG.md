@@ -4,6 +4,7 @@ CHANGELOG
 
 v2.0.0-rc.16
 ----
+ * ons-splitter-side, ons-splitter-content: Added "page" and "pageLoader" property. Changed to use page-loader instead of `ons._internal.getPageHTMLAsync()`.
  * ons-navigator: Added "page" and "pageLoader" property. Changed to use page-loader instead of `ons._internal.getPageHTMLAsync()`.
  * ons-tabbar, ons-tab: Added "page" and "pageLoader" property. Changed to use page-loader instead of `ons._internal.getPageHTMLAsync()`.
  * core: Added ons.defaultPageLoader and ons.PageLoader.
@@ -19,6 +20,7 @@ v2.0.0-rc.16
  * ons-page, ons-toolbar, ons-bottom-toolbar, ons-modal, ons-speed-dial: Improved location logic
  * ons-fab: Now stays outside of `.page__content` when it has a `position` attribute.
  * ons-modal: Fix [#1511](https://github.com/OnsenUI/OnsenUI/issues/1511).
+ * ons-lazy-repeat: Expose `refresh()` method to user through delegate object.
 
 v2.0.0-rc.15
 ----
