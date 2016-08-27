@@ -395,7 +395,7 @@ class NavigatorElement extends BaseElement {
     }).then(() => this._popPage(options, popUpdate));
   }
 
-  _popPage(options, update = () => Promise.resolve(), pages = []) {
+  _popPage(options, update = () => Promise.resolve()) {
     if (this._isRunning) {
       return Promise.reject('popPage is already running.');
     }
@@ -419,7 +419,7 @@ class NavigatorElement extends BaseElement {
       var enterPage = this.pages[length - 2];
       enterPage.style.display = 'block';
 
-      options.animation = leavePage.pushedOptions.animation || options.animation;
+      options.animation = options.animation || leavePage.pushedOptions.animation;
       options.animationOptions = util.extend(
         {},
         leavePage.pushedOptions.animationOptions,
@@ -431,8 +431,7 @@ class NavigatorElement extends BaseElement {
       }
 
       const callback = () => {
-        pages.pop();
-        update(pages, this).then(() => {
+        update().then(() => {
           this._isRunning = false;
 
           enterPage._show();
@@ -521,7 +520,7 @@ class NavigatorElement extends BaseElement {
     }));
   }
 
-  _pushPage(options = {}, update = () => Promise.resolve(), pages = [], page = {}) {
+  _pushPage(options = {}, update = () => Promise.resolve()) {
     if (this._isRunning) {
       return Promise.reject('pushPage is already running.');
     }
@@ -537,9 +536,7 @@ class NavigatorElement extends BaseElement {
 
     const animator = this._animatorFactory.newAnimator(options);
 
-    pages.push(page);
-
-    return update(pages, this).then(() => {
+    return update().then(() => {
       const pageLength = this.pages.length;
 
       var enterPage  = this.pages[pageLength - 1];
@@ -960,24 +957,24 @@ class NavigatorElement extends BaseElement {
     this.remove();
   }
 
+  /**
+   * @param {String} name
+   * @param {Function} Animator
+   */
+  static registerAnimator(name, Animator) {
+    if (!(Animator.prototype instanceof NavigatorTransitionAnimator)) {
+      throw new Error('"Animator" param must inherit OnsNavigatorElement.NavigatorTransitionAnimator');
+    }
+
+    _animatorDict[name] = Animator;
+  }
 }
 
 window.OnsNavigatorElement = document.registerElement('ons-navigator', {
   prototype: NavigatorElement.prototype
 });
 
-/**
- * @param {String} name
- * @param {Function} Animator
- */
-window.OnsNavigatorElement.registerAnimator = function(name, Animator) {
-  if (!(Animator.prototype instanceof NavigatorTransitionAnimator)) {
-    throw new Error('"Animator" param must inherit OnsNavigatorElement.NavigatorTransitionAnimator');
-  }
-
-  _animatorDict[name] = Animator;
-};
-
 window.OnsNavigatorElement.rewritables = rewritables;
 window.OnsNavigatorElement.NavigatorTransitionAnimator = NavigatorTransitionAnimator;
+window.OnsNavigatorElement.animators = _animatorDict;
 
