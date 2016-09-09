@@ -18,7 +18,7 @@ const space = {
  * @example <bh-modal-bottom cover></bh-modal-bottom> 带遮罩层的弹框
  * @example <bh-modal-bottom close-icon></bh-modal-bottom> 带关闭按钮的弹框
  */
-class BhModalBottomElement extends BaseElement {
+export default class BhModalBottomElement extends BaseElement {
     /**
      * 打开弹框
      * @param {Object} options
@@ -92,7 +92,7 @@ class BhModalBottomElement extends BaseElement {
     }
 
     //组件加载完毕的回调,相当于该组件的入口方法
-    createdCallback() {
+    init() {
         contentReady(this, () => this._compile());
     }
 
@@ -165,6 +165,4 @@ class BhModalBottomElement extends BaseElement {
 }
 
 //注册该标签(用于浏览器不支持自定义标签的处理)
-window.BhModalBottomElement = document.registerElement('bh-modal-bottom', {
-    prototype: BhModalBottomElement.prototype
-});
+customElements.define('bh-modal-bottom', BhModalBottomElement);

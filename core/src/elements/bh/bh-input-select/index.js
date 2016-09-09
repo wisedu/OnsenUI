@@ -10,10 +10,10 @@ const space = {
     rootClassName: 'bh-input-select'
 };
 
-class BhInputSelectElement extends BaseElement {
+export default class BhInputSelectElement extends BaseElement {
 
     //组件加载完毕的回调,相当于该组件的入口方法
-    createdCallback() {
+    init() {
         contentReady(this, () => this._compile());
     }
 
@@ -39,7 +39,4 @@ class BhInputSelectElement extends BaseElement {
 }
 
 //注册该标签(用于浏览器不支持自定义标签的处理)
-window.BhInputSelectElement = document.registerElement('bh-input-select', {
-    prototype: BhInputSelectElement.prototype
-});
-
+customElements.define('bh-input-select', BhInputSelectElement);

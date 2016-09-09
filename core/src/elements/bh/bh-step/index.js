@@ -19,7 +19,7 @@ const space = {
  * @example <bh-stepping></bh-stepping>
  * @example <bh-stepping value="设定初始值"></bh-stepping>
  */
-class BhSteppingElement extends BaseElement {
+export default class BhSteppingElement extends BaseElement {
 
     //定义获取input元素的方法
     get inputDom() {
@@ -78,7 +78,7 @@ class BhSteppingElement extends BaseElement {
     }
 
     //组件加载完毕的回调,相当于该组件的入口方法
-    createdCallback() {
+    init() {
         contentReady(this, () => this._compile());
     }
 
@@ -88,6 +88,9 @@ class BhSteppingElement extends BaseElement {
         if(name === 'value'){
             this.querySelector('input').value = current;
         }
+    }
+    static get observedAttributes() {
+        return ['value'];
     }
 
     //初始化方法
@@ -125,7 +128,4 @@ class BhSteppingElement extends BaseElement {
 }
 
 //注册该标签(用于浏览器不支持自定义标签的处理)
-window.BhSteppingElement = document.registerElement('bh-stepping', {
-    prototype: BhSteppingElement.prototype
-});
-
+customElements.define('bh-stepping', BhSteppingElement);

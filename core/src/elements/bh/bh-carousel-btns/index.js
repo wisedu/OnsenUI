@@ -16,7 +16,8 @@ const space = {
  *
  * @example <bh-carousel-btns count="要显示的按钮个数" active-index="要高亮的按钮index,起始数是0"></bh-carousel-btns>
  */
-class BhCarouselBtnsElement extends BaseElement {
+export default class BhCarouselBtnsElement extends BaseElement {
+
     /**
      * 设置高亮位置
      * @param {number} index 要高亮的按钮index,起始数是0
@@ -34,7 +35,7 @@ class BhCarouselBtnsElement extends BaseElement {
     }
 
     //组件加载完毕的回调,相当于该组件的入口方法
-    createdCallback() {
+    init() {
         contentReady(this, () => this._compile());
     }
 
@@ -70,7 +71,5 @@ class BhCarouselBtnsElement extends BaseElement {
 }
 
 //注册该标签(用于浏览器不支持自定义标签的处理)
-window.BhCarouselBtnsElement = document.registerElement('bh-carousel-btns', {
-    prototype: BhCarouselBtnsElement.prototype
-});
+customElements.define('bh-carousel-btns', BhCarouselBtnsElement);
 

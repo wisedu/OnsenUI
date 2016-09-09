@@ -25,7 +25,7 @@ const SPACE = {
  * @example <bh-select-roll date="列表数据的json字符串 [{key:"", value:""}]"></bh-select-roll>
  * @example <bh-select-roll date="列表数据的json字符串" selected="设定选中项{key:"",value:""}"></bh-select-roll>
  */
-class BhSelectRollElement extends BaseElement {
+export default class BhSelectRollElement extends BaseElement {
     /**
      * 获取当前选中数据
      * @returns {{key: string, value: string}}
@@ -193,7 +193,7 @@ class BhSelectRollElement extends BaseElement {
     }
 
     //组件加载完毕的回调,相当于该组件的入口方法
-    createdCallback() {
+    init() {
         contentReady(this, () => this._compile());
     }
 
@@ -214,6 +214,9 @@ class BhSelectRollElement extends BaseElement {
             default:
                 break;
         }
+    }
+    static get observedAttributes() {
+        return ['data','selected'];
     }
 
     /***
@@ -335,7 +338,4 @@ class BhSelectRollElement extends BaseElement {
 }
 
 //注册该标签(用于浏览器不支持自定义标签的处理)
-window.BhSelectRollElement = document.registerElement('bh-select-roll', {
-    prototype: BhSelectRollElement.prototype
-});
-
+customElements.define('bh-select-roll', BhSelectRollElement);

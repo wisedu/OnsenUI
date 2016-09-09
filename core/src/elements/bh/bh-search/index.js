@@ -16,7 +16,7 @@ const space = {
  *
  * @example <bh-search></bh-search>
  */
-class BhSearchElement extends BaseElement {
+export default class BhSearchElement extends BaseElement {
     /**
      * 获取或设置搜索框的值
      * @param {string} text 传入text则为设值,否则为获取值
@@ -66,7 +66,7 @@ class BhSearchElement extends BaseElement {
     }
 
     //组件加载完毕的回调,相当于该组件的入口方法
-    createdCallback() {
+    init() {
         contentReady(this, () => this._compile());
     }
 
@@ -96,6 +96,4 @@ class BhSearchElement extends BaseElement {
 }
 
 //注册该标签(用于浏览器不支持自定义标签的处理)
-window.BhSearchElement = document.registerElement('bh-search', {
-    prototype: BhSearchElement.prototype
-});
+customElements.define('bh-search', BhSearchElement);

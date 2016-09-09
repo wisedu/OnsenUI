@@ -16,10 +16,10 @@ const space = {
  * @example <bh-search-bar></bh-search-bar>
  * @example <bh-search-bar text="内容"></bh-search-bar>
  */
-class BhSearchBarElement extends BaseElement {
+export default class BhSearchBarElement extends BaseElement {
 
     //组件加载完毕的回调,相当于该组件的入口方法
-    createdCallback() {
+    init() {
         contentReady(this, () => this._compile());
     }
 
@@ -30,6 +30,10 @@ class BhSearchBarElement extends BaseElement {
             this.querySelector('span').innerHTML = current;
         }
     }
+    static get observedAttributes() {
+        return ['span'];
+    }
+
 
     //初始化方法
     _compile() {
@@ -47,6 +51,4 @@ class BhSearchBarElement extends BaseElement {
 }
 
 //注册该标签(用于浏览器不支持自定义标签的处理)
-window.BhSearchBarElement = document.registerElement('bh-search-bar', {
-    prototype: BhSearchBarElement.prototype
-});
+customElements.define('bh-search-bar', BhSearchBarElement);

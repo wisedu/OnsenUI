@@ -15,7 +15,8 @@ const space = {
  *
  * @example <bh-input label="label值" value="输入框的值"></bh-input>
  */
-class BhInputElement extends BaseElement {
+export default class BhInputElement extends BaseElement {
+
     /**
      * 获取输入框的值
      * @returns {string}
@@ -25,7 +26,7 @@ class BhInputElement extends BaseElement {
     }
 
     //组件加载完毕的回调,相当于该组件的入口方法
-    createdCallback() {
+    init() {
         contentReady(this, () => this._compile());
     }
 
@@ -50,7 +51,4 @@ class BhInputElement extends BaseElement {
 }
 
 //注册该标签(用于浏览器不支持自定义标签的处理)
-window.BhInputElement = document.registerElement('bh-input', {
-    prototype: BhInputElement.prototype
-});
-
+customElements.define('bh-input', BhInputElement);
